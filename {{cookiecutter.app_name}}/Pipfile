@@ -1,0 +1,31 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+{% if cookiecutter.cli_app %}
+click = "*"
+{% endif %}
+
+[dev-packages]
+
+coverage = "*"
+ipdb = "*"
+isort = "*"
+pluggy = "*"
+pylama = "*"
+pypi-publisher = "*"
+pytest = "==3.2.5"
+pytest-cov = "*"
+pytest-env = "*"
+pytest-metadata = ">1.5.0"
+pytest-xdist = "*"
+py = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+tox = "*"
+virtualenv = "*"
+yapf = "*"

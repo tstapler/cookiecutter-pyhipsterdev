@@ -1,9 +1,12 @@
 {
-	"full_name": "Will McGinnis",
-	"email": "",
-	"github_username": "wdm0006",
-	"project_name": "My Pip Installable Python Package",
-	"app_name": "mypippkg",
+	"full_name": "Tyler Stapler",
+	"email": "tystapler@gmail.com",
+	"github_username": "tstapler",
+	"github_project_owner": "tstapler",
+	"project_name": "Hipster Devstack, Python Edition",
+	"app_name": "pyhipsterdev",
 	"project_short_description": "A python package that can be installed with pip.",
-	"version": "0.0.1"
+	"version": "0.0.1",
+	"cloudformation": [true, false],
+	"cli_app": [true, false]
 }
