@@ -39,11 +39,11 @@ setup(
     install_requires=install_requires,
     dependency_links=dependency_links,
     author_email='{{cookiecutter.email}}',
-    {% if cookiecutter.cli_app %}
+    {%- if cookiecutter.cli_app %}
     entry_points={
         'console_scripts': [
             "{{cookiecutter.app_name}} = {{cookiecutter.app_name}}.__main__:run"
         ]
     },
-    {% endif %}
+    {%- endif %}
 )

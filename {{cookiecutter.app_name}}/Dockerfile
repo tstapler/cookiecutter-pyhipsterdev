@@ -14,7 +14,6 @@ ARG pypi_config
 RUN mkdir /root/.pip/ && echo "$pypi_config" > /root/.pip/pip.conf
 ENV PIP_CONFIG_FILE=/root/.pip/pip.conf
 
-RUN pip install pipenv
+RUN pip install pipenv virtualenvwrapper
 COPY Pipfile /pip/Pipfile
 RUN cd /pip && pipenv install --dev
-RUN pip install virtualenvwrapper

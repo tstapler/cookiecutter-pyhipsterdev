@@ -41,7 +41,7 @@ clean-pyc: ## Remove Python file artifacts
 	find . -name '*~' -exec rm -f {} +
 
 deps: ## Install runtime dependencies
-	pipenv install 
+	pipenv install
 
 dev-deps: ## Install development dependencies
 	pipenv install --dev
@@ -55,7 +55,7 @@ local-lock-deps: ## Lock the dependencies of the project
 
 DOCKER_RULES := $(DOCKER_RULES) ready
 
-local-ready: local-test-all local-create-cfn local-update-docs {% if cookiecutter.cloudformation %}local-check-cfn {% endif %}local-lock-deps ## Format and test all code
+local-ready: local-test-all local-update-docs {% if cookiecutter.cloudformation %}local-check-cfn {% endif %}local-lock-deps ## Format and test all code
 	@echo "All checks pass. You're ready to commit!"
 
 DOCKER_RULES := $(DOCKER_RULES) coverage
@@ -70,7 +70,7 @@ local-coverage-view: coverage # Open a test coverage map in your browser
 
 {% if cookiecutter.cloudformation %}
 DOCKER_RULES := $(DOCKER_RULES) check-cfn
-local-check-cfn: local-create-cfn ## Validate the cloud formation scripts
+local-check-cfn: ## Validate the cloud formation scripts
 	@cf-check cloudformation/*.yml
 {% endif %}
 
