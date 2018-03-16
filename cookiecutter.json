@@ -7,7 +7,7 @@
 	"app_name": "pyhipsterdev",
 	"project_short_description": "A python package that can be installed with pip.",
 	"version": "0.0.1",
-	"cloudformation": [true, false],
-	"cli_app": [true, false],
+	"cloudformation": ["true", "false"],
+	"cli_app": ["true", "false"],
 	"license": "MIT"
 }

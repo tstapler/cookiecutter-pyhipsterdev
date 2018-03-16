@@ -59,7 +59,7 @@ local-lock-deps: ## Lock the dependencies of the project
 
 DOCKER_RULES := $(DOCKER_RULES) ready
 
-local-ready: local-test-all local-update-docs {% if cookiecutter.cloudformation %}local-check-cfn {% endif %}local-lock-deps ## Format and test all code
+local-ready: local-test-all local-update-docs {% if cookiecutter.cloudformation == "true" %}local-check-cfn {% endif %}local-lock-deps ## Format and test all code
 	@echo "All checks pass. You're ready to commit!"
 
 DOCKER_RULES := $(DOCKER_RULES) coverage
@@ -72,11 +72,11 @@ local-coverage-view: coverage # Open a test coverage map in your browser
 	coverage html
 	open htmlcov/index.html
 
-{% if cookiecutter.cloudformation %}
+{% if cookiecutter.cloudformation == "true" -%}
 DOCKER_RULES := $(DOCKER_RULES) check-cfn
 local-check-cfn: ## Validate the cloud formation scripts
 	@cf-check cloudformation/*.yml
-{% endif %}
+{%- endif -%}
 
 DOCKER_RULES := $(DOCKER_RULES) check-format
 local-check-format: ## Throw an error if project files need formatting changes
@@ -88,7 +88,6 @@ local-check-format: ## Throw an error if project files need formatting changes
 DOCKER_RULES := $(DOCKER_RULES) package
 local-package: ## Generate packaging
 	python setup.py bdist_wheel
-	python setup.py sdist
 
 DOCKER_RULES := $(DOCKER_RULES) format
 local-format: ## Automatically format code using yapf and isort
@@ -114,7 +113,7 @@ local-update-docs: ## Update the documentation
 
 DOCKER_RULES := $(DOCKER_RULES) shell
 local-shell: ## Open a shell in the project's docker container
-	{% if cookiecutter.cli_app %}pip install -e . && {% endif %}bash
+	{% if cookiecutter.cli_app == 'true' %}pip install -e . && {% endif %}bash
 
 # Ignore files/directories with the same name as the target ex: "test"
 .PHONY: $(DOCKER_RULES)

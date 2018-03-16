@@ -6,7 +6,7 @@ name = "pypi"
 
 
 [packages]
-{% if cookiecutter.cli_app %}
+{% if cookiecutter.cli_app == 'true' %}
 click = "*"
 {% endif %}
 
