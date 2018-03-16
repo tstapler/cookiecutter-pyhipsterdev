@@ -1,0 +1,11 @@
+default_context:
+  full_name: "{{ cookiecutter.full_name }}"
+  email: "{{ cookiecutter.email }}"
+  github_username: "{{ cookiecutter.github_username }}"
+  github_project_owner: "{{ cookiecutter.github_project_owner }}"
+  project_name: "{{ cookiecutter.project_name }}"
+  app_name: "{{ cookiecutter.app_name }}"
+  project_short_description: "{{ cookiecutter.project_short_description }}"
+  cli_app: {{ cookiecutter.cli_app }}
+  cloudformation: {{ cookiecutter.cloudformation }}
+  license: {{ cookiecutter.license }}

@@ -46,6 +46,10 @@ deps: ## Install runtime dependencies
 dev-deps: ## Install development dependencies
 	pipenv install --dev
 
+update-template: ## Update the cookiecutter template (Overrides upstaged changes)
+	cookiecutter gh:tstapler/cookiecutter-pyhipsterdev --output-dir .. --config-file .cookiecutter.yaml --no-input --overwrite-if-exists
+# Template update command taken from https://github.com/audreyr/cookiecutter/issues/784
+
 # All of the rules with the "local-" prefix are not run in a docker container
 # To execute 'local-{name}' rules in the docker container add '{name}' to DOCKER_RULES.
 DOCKER_RULES := $(DOCKER_RULES) lock-deps
