@@ -81,6 +81,11 @@ local-check-format: ## Throw an error if project files need formatting changes
 	 { echo "Please run 'make format' to fix incorrect formatting" && exit 1; }
 	@echo "All python files are properly formatted"
 
+DOCKER_RULES := $(DOCKER_RULES) package
+local-package: ## Generate packaging
+	python setup.py bdist_wheel
+	python setup.py sdist
+
 DOCKER_RULES := $(DOCKER_RULES) format
 local-format: ## Automatically format code using yapf and isort
 	@echo "Formatting to fit style guide"
