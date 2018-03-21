@@ -9,5 +9,6 @@
 	"version": "0.0.1",
 	"cloudformation": ["true", "false"],
 	"cli_app": ["true", "false"],
-	"license": "MIT"
+	"license": "MIT",
+	"include_pypi_config": ["false", "true"]
 }

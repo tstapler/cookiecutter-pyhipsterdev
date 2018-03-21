@@ -5,7 +5,9 @@ RUN apt-get update -y && apt-get install -y gettext-base
 
 ARG pypi_config
 
+{% if cookiecutter.include_pypi_config %}
 RUN mkdir /root/.pip/ && echo "$pypi_config" > /root/.pip/pip.conf
+{% endif %}
 
 COPY Pipfile /pip/Pipfile
 RUN cd /pip && pipenv install --dev
