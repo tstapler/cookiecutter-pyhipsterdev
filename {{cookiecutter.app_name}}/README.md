@@ -22,7 +22,7 @@ To install use pip:
 
 Or clone the repo:
 
-    $ git clone https://github.com/workiva/harbour-careen.git
+    $ git clone https://github.com/{{cookiecutter.github_project_owner}}/{{ cookiecutter.project_name }}.git
     $ python setup.py install
 
 
