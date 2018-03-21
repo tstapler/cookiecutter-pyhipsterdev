@@ -2,13 +2,14 @@
 FROM python:3.6.4 as python
 
 RUN apt-get update -y && apt-get install -y gettext-base
-{-% if cookiecutter.include_pypi_config == "true" %}
+{%- if cookiecutter.include_pypi_config == "true" %}
 
 ARG pypi_config
 
 RUN mkdir /root/.pip/ && echo "$pypi_config" > /root/.pip/pip.conf
 {%- endif %}
 
+RUN pip install pipenv virtualenvwrapper
 COPY Pipfile /pip/Pipfile
 RUN cd /pip && pipenv install --dev
 
