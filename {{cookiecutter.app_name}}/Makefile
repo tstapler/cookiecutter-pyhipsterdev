@@ -7,7 +7,7 @@ IMAGE_TAG=$(REPO_OWNER)/$(PROJECT_NAME)_dev
 SOURCE_CODE={{cookiecutter.app_name}} tests
 
 # Build the docker container
-DOCKER_BUILD=docker build . -t $(IMAGE_TAG) {% if cookiecutter.include_pypi_config == "true" %} \
+DOCKER_BUILD=docker build . -t $(IMAGE_TAG){% if cookiecutter.include_pypi_config == "true" %} \
 	     --build-arg pypi_config=$(shell cat ~/.pip/pip.conf)
 		{%- endif %}
 
