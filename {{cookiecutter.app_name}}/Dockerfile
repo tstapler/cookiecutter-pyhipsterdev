@@ -3,9 +3,9 @@ FROM python:3.6.4 as python
 
 RUN apt-get update -y && apt-get install -y gettext-base
 
+{%- if cookiecutter.include_pypi_config == "true" %}
 ARG pypi_config
 
-{%- if cookiecutter.include_pypi_config == "true" %}
 RUN mkdir /root/.pip/ && echo "$pypi_config" > /root/.pip/pip.conf
 {%- endif %}
 
