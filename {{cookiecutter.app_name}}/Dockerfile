@@ -23,4 +23,5 @@ RUN apt-get install -y nodejs python-dev
 # Install npm dependencies
 RUN npm install -g markdown-magic
 
-COPY --from=python /root/virtualenvs /root/virtualenvs
+RUN pip install pipenv virtualenvwrapper
+COPY --from=python /root/.virtualenvs /root/.local/share/virtualenvs
