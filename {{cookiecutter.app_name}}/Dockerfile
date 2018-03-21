@@ -1,3 +1,15 @@
+# Get python dependencies as extra build step to hide credentials
+FROM python:3.6.4 as python
+
+RUN apt-get update -y && apt-get install -y gettext-base
+
+ARG pypi_config
+
+RUN mkdir /root/.pip/ && echo "$pypi_config" > /root/.pip/pip.conf
+
+COPY Pipfile /pip/Pipfile
+RUN cd /pip && pipenv install --dev
+
 FROM python:3.6.4-jessie
 
 # Add node 7 repo to apt-get
@@ -9,11 +21,4 @@ RUN apt-get install -y nodejs python-dev
 # Install npm dependencies
 RUN npm install -g markdown-magic
 
-# Install Python Dependencies
-ARG pypi_config
-RUN mkdir /root/.pip/ && echo "$pypi_config" > /root/.pip/pip.conf
-ENV PIP_CONFIG_FILE=/root/.pip/pip.conf
-
-RUN pip install pipenv virtualenvwrapper
-COPY Pipfile /pip/Pipfile
-RUN cd /pip && pipenv install --dev
+COPY --from=python /root/virtualenvs /root/virtualenvs
