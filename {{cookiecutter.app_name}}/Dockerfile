@@ -2,12 +2,9 @@
 FROM python:3.6.4 as python
 
 RUN apt-get update -y && apt-get install -y gettext-base
-{%- if cookiecutter.include_pypi_config == "true" %}
 
-ARG pypi_config
-
-RUN mkdir /root/.pip/ && echo "$pypi_config" > /root/.pip/pip.conf
-{%- endif %}
+ARG PIP_INDEX_URL
+ARG PIP_EXTRA_INDEX_URL=https://pypi.python.org/simple/
 
 RUN pip install pipenv virtualenvwrapper
 COPY Pipfile /pip/Pipfile

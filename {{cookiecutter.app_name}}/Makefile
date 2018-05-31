@@ -8,7 +8,7 @@ SOURCE_CODE={{cookiecutter.app_name}} tests
 
 # Build the docker container
 DOCKER_BUILD=docker build . -t $(IMAGE_TAG){% if cookiecutter.include_pypi_config == "true" %} \
-	     --build-arg pypi_config='$(shell cat ~/.pip/pip.conf)'
+	     --build-arg PIP_INDEX_URL="$$(grep "@pypi" ~/.pip/pip.conf | awk '{print $$3}')"
 		{%- endif %}
 
 # Ensure the container is built and execute a command in it
