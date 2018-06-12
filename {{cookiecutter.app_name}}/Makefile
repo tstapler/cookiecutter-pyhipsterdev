@@ -4,7 +4,7 @@ PROJECT_NAME={{cookiecutter.app_name}}
 
 IMAGE_TAG=$(REPO_OWNER)/$(PROJECT_NAME)_dev
 
-SOURCE_CODE={{cookiecutter.app_name}} tests setup.py
+SOURCE_CODE=$(shell find {{cookiecutter.app_name}} tests setup.py -name \*.py -type f)
 
 PIP_INDEX_URL="$$(grep "@pypi" ~/.pip/pip.conf | awk '{print $$3}')"
 
@@ -57,7 +57,7 @@ local-coverage: ## Check code coverage quickly with the default Python
 	coverage report -m
 
 DOCKER_RULES := $(DOCKER_RULES) coverage-view
-local-coverage-view: coverage # Open a test coverage map in your browser
+local-coverage-view: local-coverage local-test # Open a test coverage map in your browser
 	coverage html
 	open htmlcov/index.html
 
@@ -70,7 +70,7 @@ local-check-cfn: ## Validate the cloud formation scripts
 DOCKER_RULES := $(DOCKER_RULES) check-format
 local-check-format: ## Throw an error if project files need formatting changes
 	 @{ [ ! "$(shell yapf --recursive --diff $(SOURCE_CODE))" ]  && \
-	 [ ! "$(shell isort --check-only --ignore-whitespace --recursive | grep "ERROR")" ]; } || \
+	 [ ! "$(shell isort --check-only --ignore-whitespace --recursive | grep "ERROR")" ] && [ ! $(shell unify --check $(SOURCE_CODE)) ]; } || \
 	 { echo "Please run 'make format' to fix incorrect formatting" && exit 1; }
 	@echo "All python files are properly formatted"
 
@@ -83,6 +83,7 @@ local-format: ## Automatically format code using yapf and isort
 	@echo "Formatting to fit style guide"
 	@yapf --recursive --in-place $(SOURCE_CODE)
 	@isort --apply --atomic --recursive
+	@unify  --in-place $(SOURCE_CODE)
 
 DOCKER_RULES := $(DOCKER_RULES) test
 local-test: ## Run linter, coverage, and unit tests

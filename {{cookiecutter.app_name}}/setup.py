@@ -17,7 +17,7 @@ with open('requirements.txt', encoding='utf-8') as f:
     all_reqs = f.read().split('\n')
 
 install_requires = [
-    re.sub(r"--hash=.*", "", x.strip()) for x in all_reqs if 'git+' not in x
+    re.sub(r'--hash=.*', '', x.strip()) for x in all_reqs if 'git+' not in x
 ]
 dependency_links = [
     x.strip().replace('git+', '') for x in all_reqs if x.startswith('git+')
@@ -26,7 +26,7 @@ dependency_links = [
 setup(
     name='{{cookiecutter.app_name}}',
     version=__version__,
-    description="{{cookiecutter.project_short_description}}",
+    description='{{cookiecutter.project_short_description}}',
     long_description=long_description,
     url='https://github.com/{{cookiecutter.github_project_owner}}/{{cookiecutter.app_name}}',
     download_url='https://github.com/{{cookiecutter.github_project_owner}}/{{cookiecutter.app_name}}/tarball/' + __version__,
@@ -48,7 +48,7 @@ setup(
     {%- if cookiecutter.cli_app == 'true' %}
     entry_points={
         'console_scripts': [
-            "{{cookiecutter.app_name}} = {{cookiecutter.app_name}}.__main__:run"
+            '{{cookiecutter.app_name}} = {{cookiecutter.app_name}}.__main__:run'
         ]
     },
     {%- endif %}

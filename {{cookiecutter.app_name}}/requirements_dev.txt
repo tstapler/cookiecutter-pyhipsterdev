@@ -25,3 +25,4 @@ mccabe
 pylint
 pylama-pylint
 pyflakes
+unify
