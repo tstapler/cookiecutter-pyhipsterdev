@@ -6,6 +6,8 @@ IMAGE_TAG=$(REPO_OWNER)/$(PROJECT_NAME)_dev
 
 SOURCE_CODE={{cookiecutter.app_name}} tests
 
+PIP_INDEX_URL="$$(grep "@pypi" ~/.pip/pip.conf | awk '{print $$3}')"
+
 # Build the docker container
 DOCKER_BUILD=docker build . -t $(IMAGE_TAG){% if cookiecutter.include_pypi_config == "true" %} \
 	     --build-arg PIP_INDEX_URL="$$(grep "@pypi" ~/.pip/pip.conf | awk '{print $$3}')"
@@ -14,11 +16,8 @@ DOCKER_BUILD=docker build . -t $(IMAGE_TAG){% if cookiecutter.include_pypi_confi
 # Ensure the container is built and execute a command in it
 DOCKER_RUN=$(DOCKER_BUILD) && docker run -it -v $(CURDIR):/$(PROJECT_NAME) $(IMAGE_TAG) sh -c
 
-# Activate the virtualenv created by Pipenv
-RUNP=. /root/.local/share/virtualenvs/pip-*/bin/activate &&
-
 # Run before every command executed in the container
-DOCKER_PRETASK=$(RUNP) cd /$(PROJECT_NAME) && make local-format
+DOCKER_PRETASK=cd /$(PROJECT_NAME) && make local-format
 
 # Run run local make target in a docker container ex: check-cfn -> local-checkcfn
 RUN_LOCAL_COMMAND_IN_DOCKER=$(DOCKER_RUN) "$(DOCKER_PRETASK) && make local-$@"
@@ -42,26 +41,14 @@ clean-pyc: ## Remove Python file artifacts
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
 
-deps: ## Install runtime dependencies
-	pipenv install
-
-dev-deps: ## Install development dependencies
-	pipenv install --dev
-
 update-template: ## Update the cookiecutter template (Overrides upstaged changes)
 	cookiecutter gh:tstapler/cookiecutter-pyhipsterdev --output-dir .. --config-file .cookiecutter.yaml --no-input --overwrite-if-exists
 # Template update command taken from https://github.com/audreyr/cookiecutter/issues/784
 
 # All of the rules with the "local-" prefix are not run in a docker container
 # To execute 'local-{name}' rules in the docker container add '{name}' to DOCKER_RULES.
-DOCKER_RULES := $(DOCKER_RULES) lock-deps
-local-lock-deps: ## Lock the dependencies of the project
-	pipenv lock --requirements  > requirements.txt
-	pipenv lock --requirements --dev > requirements_dev.txt
-
 DOCKER_RULES := $(DOCKER_RULES) ready
-
-local-ready: local-test-all local-update-docs {% if cookiecutter.cloudformation == "true" %}local-check-cfn {% endif %}local-lock-deps ## Format and test all code
+local-ready: local-test-all local-update-docs {% if cookiecutter.cloudformation == "true" %}local-check-cfn {% endif %}## Format and test all code
 	@echo "All checks pass. You're ready to commit!"
 
 DOCKER_RULES := $(DOCKER_RULES) coverage
@@ -99,15 +86,15 @@ local-format: ## Automatically format code using yapf and isort
 
 DOCKER_RULES := $(DOCKER_RULES) test
 local-test: ## Run linter, coverage, and unit tests
+	py.test -x tests
+
+DOCKER_RULES := $(DOCKER_RULES) debug
+local-debug: ## Run linter, coverage, and debug unit tests
 	py.test -x --pdb tests
 
 DOCKER_RULES := $(DOCKER_RULES) test-watch
 local-test-watch: ## Run the unit tests on filechanges
 	py.test --looponfail tests
-
-DOCKER_RULES := $(DOCKER_RULES) test-all
-local-test-all: local-lock-deps ## Run the tests on both python 2.7 and 3.6
-	tox
 
 DOCKER_RULES := $(DOCKER_RULES) update-docs
 local-update-docs: ## Update the documentation
@@ -115,7 +102,7 @@ local-update-docs: ## Update the documentation
 
 DOCKER_RULES := $(DOCKER_RULES) shell
 local-shell: ## Open a shell in the project's docker container
-	{% if cookiecutter.cli_app == 'true' %}pip install -e . && {% endif %}bash
+	bash
 
 # Ignore files/directories with the same name as the target ex: "test"
 .PHONY: $(DOCKER_RULES)
