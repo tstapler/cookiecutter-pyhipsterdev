@@ -48,7 +48,7 @@ update-template: ## Update the cookiecutter template (Overrides upstaged changes
 # All of the rules with the "local-" prefix are not run in a docker container
 # To execute 'local-{name}' rules in the docker container add '{name}' to DOCKER_RULES.
 DOCKER_RULES := $(DOCKER_RULES) ready
-local-ready: local-test-all local-update-docs {% if cookiecutter.cloudformation == "true" %}local-check-cfn {% endif %}## Format and test all code
+local-ready: local-test local-update-docs {% if cookiecutter.cloudformation == "true" %}local-check-cfn {% endif %}## Format and test all code
 	@echo "All checks pass. You're ready to commit!"
 
 DOCKER_RULES := $(DOCKER_RULES) coverage
