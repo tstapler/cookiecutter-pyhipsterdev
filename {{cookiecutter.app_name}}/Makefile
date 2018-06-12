@@ -4,7 +4,7 @@ PROJECT_NAME={{cookiecutter.app_name}}
 
 IMAGE_TAG=$(REPO_OWNER)/$(PROJECT_NAME)_dev
 
-SOURCE_CODE={{cookiecutter.app_name}} tests
+SOURCE_CODE={{cookiecutter.app_name}} tests setup.py
 
 PIP_INDEX_URL="$$(grep "@pypi" ~/.pip/pip.conf | awk '{print $$3}')"
 
